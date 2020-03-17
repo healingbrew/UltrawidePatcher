@@ -30,13 +30,14 @@ namespace UltrawidePatcher
             }
 
             var buffer = File.ReadAllBytes(flags.File);
+            File.WriteAllBytes(Path.ChangeExtension(flags.File, ".bak"), buffer.ToArray());
 
             ReplaceSignature(buffer, "FOV", flags.FOVSignature, fovTarget);
             ReplaceSignature(buffer, "Unreal Engine 4 Aspect Ratio", flags.UE4RatioSignature, fovTarget);
             ReplaceSignature(buffer, "Unreal Engine 4 Pillarbox", flags.UE4PillarboxSignature, flags.UE4PillarboxTarget?.ToHexOctetsB());
             ReplaceSignature(buffer, "Unreal Engine 4 FOV", flags.UE4YFOVSignature, flags.UE4YFOVTarget?.ToHexOctetsB());
             
-            File.WriteAllBytes(Path.ChangeExtension(flags.File, ".ultrawide.exe"), buffer.ToArray());
+            File.WriteAllBytes(flags.File, buffer.ToArray());
         }
 
         private static void ReplaceSignature(Span<byte> buffer, string name, string? signature, Span<byte> target)
